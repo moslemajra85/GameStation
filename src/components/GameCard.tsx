@@ -8,6 +8,7 @@ import GameCardContainer from './GameCardContainer';
 interface Props {
   game: Game;
 }
+
 const GameCard = ({ game }: Props) => {
   return (
     <GameCardContainer>
