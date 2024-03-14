@@ -24,19 +24,24 @@ interface fecthGamesResponse {
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
+    setIsLoading(true);
     apiClient
       .get<fecthGamesResponse>('/games', {
         signal: controller.signal,
       })
-      .then((res) => setGames(res.data.results))
+      .then((res) => {
+        setGames(res.data.results);
+        setIsLoading(false);
+      })
       .catch((err: Error) => {
         if (err instanceof CanceledError) return;
-
         setError(err.message);
+        setIsLoading(false);
       });
 
     return () => controller.abort();
@@ -45,6 +50,7 @@ const useGames = () => {
   return {
     games,
     error,
+    isLoading,
   };
 };
 
